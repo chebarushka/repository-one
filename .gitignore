@@ -1,0 +1,10 @@
+gradle/
+build/
+.gradle/
+.project/
+.vertx/
+.idea/
+
+*.iml
+gradlew*
+gradle.properties
