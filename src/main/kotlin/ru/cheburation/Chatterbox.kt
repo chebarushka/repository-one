@@ -2,39 +2,33 @@ package ru.cheburation
 
 import io.vertx.core.Future
 import io.vertx.kotlin.coroutines.CoroutineVerticle
-import kotlinx.coroutines.launch
-import ru.cheburation.vertx.Counter
+import ru.cheburation.flow.LoggerNode
+import ru.cheburation.flow.PlainMessage
+import java.time.Duration
 import java.util.concurrent.atomic.AtomicLong
 
-abstract class Chatterbox() : CoroutineVerticle() {
+class Chatterbox : CoroutineVerticle() {
 
   companion object {
-    val address = "verticle#"
+    val node = LoggerNode("talking-head")
+    val delay = Duration.ofSeconds(1)
   }
 
   override fun start(startFuture: Future<Void>?) {
-    val sent: AtomicLong = AtomicLong()
-    val recieved: AtomicLong = AtomicLong()
+    val sent = AtomicLong()
 
-    launch {
-      val verticles = Counter(vertx, "verticles")
-
-      vertx.eventBus().consumer<String>("$address${verticles.inc()}") {
-        println("recieved: ${recieved.incrementAndGet()}")
-      }
-
-      vertx.setPeriodic(500) {
-        verticles.get {
-          vertx.eventBus().send("$address${addressee(it).limit(it)}", "message")
-          println("sent: ${sent.incrementAndGet()}")
-        }
-      }
-
-      startFuture?.complete()
+    vertx.eventBus().consumer<String>(node.id()) {
+      val message = PlainMessage(it.body(), node.id())
+      node.recieve(message)
+      node.process(message)
     }
+
+    vertx.setPeriodic(delay.toMillis()) {
+      val id = sent.incrementAndGet().toString()
+      vertx.eventBus().send(node.id(), id)
+      node.send(PlainMessage(id, node.id()), node.id())
+    }
+
+    startFuture?.complete()
   }
-
-  abstract fun addressee(count: Long): Long
 }
-
-private fun Long.limit(cap: Long) = if (this > cap) cap else this

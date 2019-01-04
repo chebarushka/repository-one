@@ -9,8 +9,7 @@ import io.vertx.kotlin.coroutines.awaitResult
 class Counter private constructor(private val counter: Counter) {
 
   companion object {
-    suspend operator fun invoke(vertx: Vertx, name: String) =
-      Counter(awaitResult { vertx.sharedData().getCounter(name, it) })
+    suspend operator fun invoke(vertx: Vertx, name: String) = Counter(awaitResult { vertx.sharedData().getCounter(name, it) })
   }
 
   fun get(handler: (Long) -> Unit) = counter.get {
