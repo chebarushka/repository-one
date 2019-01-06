@@ -11,7 +11,7 @@ class Chatterbox : CoroutineVerticle() {
 
   companion object {
     val node = LoggerNode("talking-head")
-    val delay = Duration.ofSeconds(1)
+    val delay = Duration.ofSeconds(1)!!
   }
 
   override fun start(startFuture: Future<Void>?) {
