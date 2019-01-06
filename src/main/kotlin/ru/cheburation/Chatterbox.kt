@@ -19,7 +19,7 @@ class Chatterbox : CoroutineVerticle() {
 
     vertx.eventBus().consumer<String>(node.id()) {
       val message = PlainMessage(it.body(), node.id())
-      node.recieve(message)
+      node.receive(message)
       node.process(message)
     }
 

@@ -4,7 +4,7 @@ interface Node {
 
   fun id(): String
 
-  fun recieve(message: Message)
+  fun receive(message: Message)
 
   fun send(message: Message, address: String)
 

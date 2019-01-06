@@ -2,8 +2,8 @@ package ru.cheburation.flow
 
 class LoggerNode(private val id: String) : Node {
 
-  override fun recieve(message: Message) {
-    println("recieved: $message")
+  override fun receive(message: Message) {
+    println("received: $message")
   }
 
   override fun send(message: Message, address: String) {
