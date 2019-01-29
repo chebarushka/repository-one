@@ -1,12 +1,10 @@
 package ru.cheburation.flow
 
-interface Node {
+abstract class Node(internal val id: String) {
 
-  fun id(): String
+  abstract fun receive(message: Message)
 
-  fun receive(message: Message)
+  abstract fun send(message: Message, address: String)
 
-  fun send(message: Message, address: String)
-
-  fun process(message: Message)
+  abstract fun process(message: Message)
 }

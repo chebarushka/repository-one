@@ -10,23 +10,23 @@ import java.util.concurrent.atomic.AtomicLong
 class Chatterbox : CoroutineVerticle() {
 
   companion object {
-    val node = LoggerNode("talking-head")
-    val delay = Duration.ofSeconds(1)!!
+    private val node = LoggerNode("talking-head")
+    private val delay = Duration.ofSeconds(1)!!
   }
 
   override fun start(startFuture: Future<Void>?) {
-    val sent = AtomicLong()
 
-    vertx.eventBus().consumer<String>(node.id()) {
-      val message = PlainMessage(it.body(), node.id())
+    vertx.eventBus().consumer<String>(node.id) {
+      val message = PlainMessage(it.body(), node.id)
       node.receive(message)
       node.process(message)
     }
 
+    val sent = AtomicLong()
     vertx.setPeriodic(delay.toMillis()) {
       val id = sent.incrementAndGet().toString()
-      vertx.eventBus().send(node.id(), id)
-      node.send(PlainMessage(id, node.id()), node.id())
+      vertx.eventBus().send(node.id, id)
+      node.send(PlainMessage(id, node.id), node.id)
     }
 
     startFuture?.complete()

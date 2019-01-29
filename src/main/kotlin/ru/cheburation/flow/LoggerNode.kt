@@ -1,18 +1,14 @@
 package ru.cheburation.flow
 
-class LoggerNode(private val id: String) : Node {
+import ru.cheburation.logging.LoggerDelegate
 
-  override fun receive(message: Message) {
-    println("received: $message")
-  }
+class LoggerNode(id: String) : Node(id) {
 
-  override fun send(message: Message, address: String) {
-    println("send: $message to [$address]")
-  }
+  private val log by LoggerDelegate()
 
-  override fun process(message: Message) {
-    println("process: $message")
-  }
+  override fun receive(message: Message) = log.info("received: $message")
 
-  override fun id() = id
+  override fun send(message: Message, address: String) = log.info("send: $message to [$address]")
+
+  override fun process(message: Message) = log.info("process: $message")
 }

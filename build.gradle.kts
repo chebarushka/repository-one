@@ -1,20 +1,20 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  kotlin("jvm") version "1.3.10"
+  kotlin("jvm") version "1.3.11"
 }
 
 group = "ru.cheburation"
 version = "0.1-SNAPSHOT"
-
-val vertxVersion = "3.6.1"
-val log4jVersion = "2.9.1"
 
 repositories {
   mavenCentral()
 }
 
 dependencies {
+  val vertxVersion = "3.6.2"
+  val log4jVersion = "2.9.1"
+
   compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   compile("io.vertx:vertx-core:$vertxVersion")
   compile("io.vertx:vertx-hazelcast:$vertxVersion")

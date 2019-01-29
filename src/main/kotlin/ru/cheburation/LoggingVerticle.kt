@@ -1,13 +1,12 @@
 package ru.cheburation
 
 import io.vertx.core.AbstractVerticle
-import org.slf4j.LoggerFactory
+import ru.cheburation.logging.LoggerDelegate
 
 class LoggingVerticle : AbstractVerticle() {
-  private val log = LoggerFactory.getLogger(LoggingVerticle::class.java)
+  private val log by LoggerDelegate()
 
   override fun start() {
-    super.start()
     vertx.eventBus().consumer<String>("logging") { e -> log.info(e.body()) }
   }
 }
